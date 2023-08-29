@@ -2,8 +2,10 @@ package com.platzi.market.persistance.mapper;
 
 import com.platzi.market.domain.Product;
 import com.platzi.market.persistance.entity.Producto;
-import org.mapstruct.*;
-import org.springframework.stereotype.Repository;
+import org.mapstruct.InheritInverseConfiguration;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.Mappings;
 
 import java.util.List;
 
@@ -22,7 +24,6 @@ public interface ProductMapper {
     List<Product> toProducts(List<Producto> productos);
 
     @InheritInverseConfiguration
-    @Mapping(target = "codigoBarras", ignore = true)
+    @Mapping(target = "codigoBarras", ignore = true) //hacemos esto para ignorar el codigo de barras
     Producto toProducto (Product product);
 }
-//hacemos esto para ignorar el codigo de barras

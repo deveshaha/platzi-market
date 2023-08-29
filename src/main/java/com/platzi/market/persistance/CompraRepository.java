@@ -1,7 +1,7 @@
 package com.platzi.market.persistance;
 
 import com.platzi.market.domain.Purchase;
-import com.platzi.market.domain.repo.PurchaseRepo;
+import com.platzi.market.domain.repo.PurchaseRepository;
 import com.platzi.market.persistance.crud.CompraCrudRepo;
 import com.platzi.market.persistance.entity.Compra;
 import com.platzi.market.persistance.mapper.PurchaseMapper;
@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public class CompraRepo implements PurchaseRepo {
+public class CompraRepository implements PurchaseRepository {
 
     @Autowired
     private CompraCrudRepo compraCrudRepo;
@@ -22,18 +22,20 @@ public class CompraRepo implements PurchaseRepo {
 
     @Override
     public List<Purchase> getAllPurchases() {
-        return mapper.toPurchase((List<Compra>) compraCrudRepo.findAll());
+        return mapper.toPurchases((List<Compra>) compraCrudRepo.findAll());
     }
 
     @Override
     public Optional<List<Purchase>> getPurchaseByClient(String clientId) {
-        return compraCrudRepo.findByIdCliente(clientId).map(compras -> mapper.toPurchase(compras));
+        return compraCrudRepo.findByIdCliente(clientId)
+                .map(compras -> mapper.toPurchases(compras));
     }
 
     @Override
-    public Purchase save(Purchase purchase) {
+    public Purchase savePurchase(Purchase purchase) {
         Compra compra = mapper.toCompra(purchase);
         compra.getProductos().forEach(producto -> producto.setCompra(compra));
+
         return mapper.toPurchase(compraCrudRepo.save(compra));
     }
 }
